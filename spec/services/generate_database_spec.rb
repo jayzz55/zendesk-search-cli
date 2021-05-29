@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'services/generate_database'
 
-fdescribe Services::GenerateDatabase do
+describe Services::GenerateDatabase do
   describe '#call' do
     subject(:database) { described_class.call(input) }
 
@@ -437,6 +437,35 @@ fdescribe Services::GenerateDatabase do
           101 => [ticket_1_id],
           nil => [ticket_2_id]
         })
+      end
+    end
+
+    context 'when invalid record is provided' do
+      let(:input) do
+        {
+          'foo' => user_json,
+          'organizations' => organization_json,
+          'tickets' => ticket_json
+        }
+      end
+
+      it 'returns a failure' do
+        expect(database.failure).to be_a(Models::GenerateDatabaseError)
+      end
+    end
+
+    context 'when invalid data is provided' do
+      let(:organization_json) do
+        [
+          {
+            "_id" => 102,
+            "random_attribute" => 123
+          }
+        ]
+      end
+
+      it 'returns a failure' do
+        expect(database.failure).to be_a(Models::GenerateDatabaseError)
       end
     end
   end

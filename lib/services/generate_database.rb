@@ -69,7 +69,7 @@ module Services
           in 'users' | 'organizations' | 'tickets' => matched_record
             Object.const_get("#{matched_record.upcase}_SCHEMA")
           in _
-            raise Models::GenerateDatabaseError, "unknown#{key} record error"
+            raise Models::GenerateDatabaseError, "unknown #{record} record error"
         end
       end
 
