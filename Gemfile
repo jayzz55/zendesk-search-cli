@@ -8,6 +8,7 @@ end
 
 group :test, :development do
   gem 'pry'
+  gem 'rspec-its'
   gem 'rubocop', require: false
   gem 'rubocop-rspec', require: false
 end
