@@ -6,8 +6,8 @@ require 'dry/monads'
 require 'models/database'
 require 'errors/generate_database'
 
-module Services
-  class GenerateDatabase
+module Generators
+  class Database
     @database = nil
 
     class << self

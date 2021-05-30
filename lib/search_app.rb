@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'services/generate_database'
+require 'generators/database'
 require 'repository'
 require 'json'
 require 'dry/monads'
@@ -18,7 +18,7 @@ class SearchApp
       parsed_organization_json = yield parse_json(organization_json)
       parsed_ticket_json = yield parse_json(ticket_json)
 
-      db = yield Services::GenerateDatabase.call(
+      db = yield Generators::Database.call(
         'users' => parsed_user_json,
         'organizations' => parsed_organization_json,
         'tickets' => parsed_ticket_json
