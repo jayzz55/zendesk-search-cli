@@ -2,7 +2,6 @@
 
 require 'dry/monads'
 require 'errors/unknown_search_term'
-require 'services/fetch_schema'
 
 module Validators
   class SearchTerm

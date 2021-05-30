@@ -6,6 +6,7 @@ require 'dry/monads'
 require 'models/database'
 require 'errors/generate_database'
 require 'services/fetch_schema'
+require 'parsers/time_attributes'
 
 module Generators
   class Database
@@ -20,6 +21,9 @@ module Generators
 
           input.each do |record, json_data|
             schema = get_schema!(record)
+
+            @database.add_schema(record: record, schema: schema)
+
             primary_key = primary_key_from(schema)
 
             json_data.each do |row_data|
@@ -68,15 +72,13 @@ module Generators
       end
 
       def get_schema!(record)
-        Services::FetchSchema.call(record: record)
-                             .value_or { raise Errors::GenerateDatabase, "unknown #{record} record error" }
+        Services::FetchSchema
+          .call(record: record)
+          .value_or { raise Errors::GenerateDatabase, "unknown #{record} record error" }
       end
 
       def time_attributes_from(value)
-        time = Time.parse(value).utc
-        [time.year, time.month, time.day, time.hour, time.min, time.sec]
-      rescue ArgumentError
-        ['']
+        Parsers::TimeAttributes.call(value: value).value_or('')
       end
 
       def primary_key_from(schema)

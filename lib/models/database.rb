@@ -3,13 +3,19 @@
 module Models
   class Database
     attr_reader :data
+    attr_reader :schema
 
-    def initialize(data = {})
+    def initialize(data = {}, schema = {})
       @data = data
+      @schema = schema
     end
 
     def available_records
       data.keys
+    end
+
+    def add_schema(record:, schema:)
+      @schema[record] = schema
     end
 
     def get_record(record:, key:)

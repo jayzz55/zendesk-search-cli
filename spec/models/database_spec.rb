@@ -4,6 +4,23 @@ require 'spec_helper'
 require 'models/database'
 
 describe Models::Database do
+  describe '.add_schema' do
+    subject(:add_schema) { database.add_schema(record: record, schema: schema) }
+
+    let(:database) { described_class.new() }
+    let(:record) { 'foo' }
+    let(:schema) do
+      {
+        'id': { 'type' => 'string' }
+      }
+    end
+
+    it 'adds the provided schema' do
+      add_schema
+      expect(database.schema).to match({ 'foo' => schema })
+    end
+  end
+
   describe '.get_record' do
     subject(:get_record) { described_class.new(data).get_record(record: record, key: key) }
 

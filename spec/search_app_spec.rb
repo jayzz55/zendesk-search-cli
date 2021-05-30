@@ -252,4 +252,56 @@ describe SearchApp do
       end
     end
   end
+
+  describe '.search_for' do
+    subject(:search_for) do
+      search_app.value!.search_for(
+        record: record, search_term: search_term, value: value
+      )
+    end
+
+    context 'when failed in fetching schema' do
+      let(:record) { 'foo' }
+      let(:search_term) { 'created_at' }
+      let(:value) { '2013-08-04T01:03:27 -10:00' }
+
+      it 'returns a Failure' do
+        expect(search_for.failure).to be_a Errors::UnknownSchemaRecord
+      end
+    end
+
+    context 'when provided search_term is invalid' do
+      let(:record) { 'users' }
+      let(:search_term) { 'foo' }
+      let(:value) { '2013-08-04T01:03:27 -10:00' }
+
+      it 'returns a Failure' do
+        expect(search_for.failure).to be_a Errors::UnknownSearchTerm
+      end
+    end
+
+    context 'when provided value is invalid' do
+      let(:record) { 'users' }
+      let(:search_term) { 'created_at' }
+      let(:value) { 'foo' }
+
+      it 'returns a Failure' do
+        expect(search_for.failure).to be_a Errors::InvalidSearchValue
+      end
+    end
+
+    context 'when provided input is valid' do
+      let(:record) { 'users' }
+      let(:search_term) { 'created_at' }
+      let(:value) { '2016-04-15T05:19:46 -10:00' }
+
+      it 'returns a Success' do
+        expect(search_for.success?).to eq true
+      end
+
+      it 'has search results with 2 users' do
+        expect(search_for.value!.size).to eq 2
+      end
+    end
+  end
 end
