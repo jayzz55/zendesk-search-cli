@@ -2,8 +2,7 @@
 
 module Models
   class Database
-    attr_reader :data
-    attr_reader :schema
+    attr_reader :data, :schema
 
     def initialize(data = {}, schema = {})
       @data = data
