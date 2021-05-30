@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'validators/search_term'
+require 'services/validate_search_term'
 
-describe Validators::SearchTerm do
+describe Services::ValidateSearchTerm do
   describe '#call' do
     subject(:call) do
       described_class.call(search_terms: search_terms, value: value)

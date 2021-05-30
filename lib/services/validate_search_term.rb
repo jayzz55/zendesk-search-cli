@@ -3,8 +3,8 @@
 require 'dry/monads'
 require 'errors/unknown_search_term'
 
-module Validators
-  class SearchTerm
+module Services
+  class ValidateSearchTerm
     class << self
       include Dry::Monads[:result]
 

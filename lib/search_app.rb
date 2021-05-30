@@ -2,7 +2,7 @@
 
 require 'services/generate_database'
 require 'services/fetch_schema'
-require 'validators/search_term'
+require 'services/validate_search_term'
 require 'parsers/search_value'
 require 'repository'
 require 'json'
@@ -55,13 +55,13 @@ class SearchApp
 
   def validate_search_term(record:, search_term:)
     get_search_terms_for(record: record).bind do |search_terms|
-      Validators::SearchTerm.call(search_terms: search_terms, value: search_term)
+      Services::ValidateSearchTerm.call(search_terms: search_terms, value: search_term)
     end
   end
 
   def search_for(record:, search_term:, value:)
     schema = yield Services::FetchSchema.call(record: record)
-    yield Validators::SearchTerm.call(search_terms: schema.keys, value: search_term)
+    yield Services::ValidateSearchTerm.call(search_terms: schema.keys, value: search_term)
     parsed_value = yield Parsers::SearchValue
                    .call(type: schema.dig(search_term, 'type'), value: value)
                    .to_result(Errors::InvalidSearchValue.new("search value #{value} is invalid"))
