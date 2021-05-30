@@ -126,15 +126,16 @@ describe SearchApp do
       }
     ]
   end
+  let(:search_app) do
+    described_class.init(
+      user_json: user_json,
+      organization_json: organization_json,
+      ticket_json: ticket_json
+    )
+  end
 
   describe '#init' do
-    subject(:init) do
-      described_class.init(
-        user_json: user_json,
-        organization_json: organization_json,
-        ticket_json: ticket_json
-      )
-    end
+    subject(:init) { search_app }
 
     it 'returns a Success' do
       expect(init.success?).to eq true
@@ -181,11 +182,7 @@ describe SearchApp do
 
   describe '.available_records' do
     subject(:available_records) do
-      described_class.init(
-        user_json: user_json,
-        organization_json: organization_json,
-        ticket_json: ticket_json
-      ).value!.available_records
+      search_app.value!.available_records
     end
 
     it 'returns a Success' do
@@ -194,6 +191,32 @@ describe SearchApp do
 
     it 'has the known available records' do
       expect(available_records.value!).to eq(['users', 'organizations', 'tickets'])
+    end
+  end
+
+  describe '.get_search_terms_for' do
+    subject(:search_terms) do
+      search_app.value!.get_search_terms_for(record: record)
+    end
+
+    context 'when successfully fetching schema' do
+      let(:record) { 'users' }
+
+      it 'returns a Success' do
+        expect(search_terms.success?).to eq true
+      end
+
+      it 'has the known available records' do
+        expect(search_terms.value!).to eq(USERS_SCHEMA.keys)
+      end
+    end
+
+    context 'when failed in fetching schema' do
+      let(:record) { 'foo' }
+
+      it 'returns a Failure' do
+        expect(search_terms.failure).to be_a Errors::UnknownSchemaRecord
+      end
     end
   end
 end

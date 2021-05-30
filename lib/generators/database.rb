@@ -69,7 +69,7 @@ module Generators
 
       def get_schema!(record)
         Services::FetchSchema.call(record: record)
-          .value_or { raise Errors::GenerateDatabase, "unknown #{record} record error" }
+                             .value_or { raise Errors::GenerateDatabase, "unknown #{record} record error" }
       end
 
       def time_attributes_from(value)

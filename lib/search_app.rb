@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'generators/database'
+require 'services/fetch_schema'
 require 'repository'
 require 'json'
 require 'dry/monads'
@@ -42,5 +43,9 @@ class SearchApp
 
   def available_records
     Success(repo.available_records)
+  end
+
+  def get_search_terms_for(record:)
+    Services::FetchSchema.call(record: record).fmap(&:keys)
   end
 end
