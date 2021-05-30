@@ -227,6 +227,15 @@ describe SearchApp do
 
     let(:record) { 'users' }
 
+    context 'when failed in fetching schema' do
+      let(:record) { 'foo' }
+      let(:search_term) { 'createda_at' }
+
+      it 'returns a Failure' do
+        expect(validate_search_term.failure).to be_a Errors::UnknownSchemaRecord
+      end
+    end
+
     context 'when provided search_term is invalid' do
       let(:search_term) { 'foo' }
 

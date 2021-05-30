@@ -9,17 +9,15 @@ module Validators
     class << self
       include Dry::Monads[:result]
 
-      def call(record:, search_term:)
-        Services::FetchSchema.call(record: record).fmap(&:keys).bind do |keys|
-          if keys.include?(search_term)
-            Success()
-          else
-            Failure(
-              Errors::UnknownSearchTerm.new(
-                "unknown search term #{search_term} for the record #{record}"
-              )
+      def call(search_terms:, value:)
+        if search_terms.include?(value)
+          Success()
+        else
+          Failure(
+            Errors::UnknownSearchTerm.new(
+              "unknown search term #{value} provided"
             )
-          end
+          )
         end
       end
     end
