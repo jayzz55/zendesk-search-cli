@@ -4,7 +4,7 @@ require 'schemas'
 require 'time'
 require 'dry/monads'
 require 'models/database'
-require 'models/error'
+require 'errors/generate_database'
 
 module Services
   class GenerateDatabase
@@ -36,7 +36,7 @@ module Services
         data.each do |key, value|
           case schema.dig(key, 'type')
             in nil
-              raise Models::GenerateDatabaseError, "unknown schema #{key} error"
+              raise Errors::GenerateDatabase, "unknown schema #{key} error"
             in 'Integer' if schema.dig(key, 'primary_key')
               @database.upsert_record(record: record, primary_key: value.to_i, value: data)
             in 'String' if schema.dig(key, 'primary_key')
@@ -71,7 +71,7 @@ module Services
           in 'users' | 'organizations' | 'tickets' => matched_record
             Object.const_get("#{matched_record.upcase}_SCHEMA")
           in _
-            raise Models::GenerateDatabaseError, "unknown #{record} record error"
+            raise Errors::GenerateDatabase, "unknown #{record} record error"
         end
       end
 

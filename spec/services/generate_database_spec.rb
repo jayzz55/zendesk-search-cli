@@ -462,7 +462,7 @@ describe Services::GenerateDatabase do
       end
 
       it 'returns a failure' do
-        expect(database.failure).to be_a(Models::GenerateDatabaseError)
+        expect(database.failure).to be_a(Errors::GenerateDatabase)
       end
     end
 
@@ -477,7 +477,7 @@ describe Services::GenerateDatabase do
       end
 
       it 'returns a failure' do
-        expect(database.failure).to be_a(Models::GenerateDatabaseError)
+        expect(database.failure).to be_a(Errors::GenerateDatabase)
       end
     end
   end
