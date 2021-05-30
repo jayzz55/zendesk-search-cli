@@ -5,6 +5,7 @@ require 'time'
 require 'dry/monads'
 require 'models/database'
 require 'errors/generate_database'
+require 'services/fetch_schema'
 
 module Generators
   class Database
@@ -67,12 +68,8 @@ module Generators
       end
 
       def get_schema!(record)
-        case record
-          in 'users' | 'organizations' | 'tickets' => matched_record
-            Object.const_get("#{matched_record.upcase}_SCHEMA")
-          in _
-            raise Errors::GenerateDatabase, "unknown #{record} record error"
-        end
+        Services::FetchSchema.call(record: record)
+          .value_or { raise Errors::GenerateDatabase, "unknown #{record} record error" }
       end
 
       def time_attributes_from(value)
