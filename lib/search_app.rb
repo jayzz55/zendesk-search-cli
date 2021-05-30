@@ -7,6 +7,8 @@ require 'dry/monads'
 require 'dry/monads/do'
 
 class SearchApp
+  include Dry::Monads[:try, :result]
+
   class << self
     include Dry::Monads::Do.for(:init)
     include Dry::Monads[:try, :result]
@@ -36,5 +38,9 @@ class SearchApp
 
   def initialize(repo)
     @repo = repo
+  end
+
+  def available_records
+    Success(repo.available_records)
   end
 end

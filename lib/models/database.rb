@@ -8,6 +8,10 @@ module Models
       @data = data
     end
 
+    def available_records
+      data.keys
+    end
+
     def get_record(record:, key:)
       data.dig(record, key)
     end

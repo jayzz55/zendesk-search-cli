@@ -179,4 +179,23 @@ describe Models::Database do
       end
     end
   end
+
+  describe '.available_records' do
+    subject(:records) { described_class.new(data).available_records }
+
+    let(:data) do
+      {
+        foo: {
+          1 => 123
+        },
+        bar: {
+          1 => 123
+        }
+      }
+    end
+
+    it 'returns the keys of the hash data' do
+      expect(records).to eq([:foo, :bar])
+    end
+  end
 end
