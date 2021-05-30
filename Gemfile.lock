@@ -67,6 +67,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-18
+  x86_64-linux-musl
 
 DEPENDENCIES
   activesupport-inflector
@@ -80,4 +81,4 @@ DEPENDENCIES
   simplecov
 
 BUNDLED WITH
-   2.2.3
+   2.2.15
