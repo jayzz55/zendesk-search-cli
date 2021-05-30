@@ -129,9 +129,9 @@ describe Models::Database do
     end
   end
 
-  describe '.upsert_index' do
-    subject(:upsert_index) do
-      database.upsert_index(record: record, paths: paths, index: index)
+  describe '.insert_index' do
+    subject(:insert_index) do
+      database.insert_index(record: record, paths: paths, index: index)
     end
 
     let(:database) { described_class.new(data) }
@@ -145,7 +145,7 @@ describe Models::Database do
       end
 
       it 'updates the index within the data with the provided record, paths, and index' do
-        upsert_index
+        insert_index
         expect(database.data).to match({
           foo: {
             'index' => {
@@ -168,7 +168,7 @@ describe Models::Database do
       end
 
       it 'append the index within the data with the provided record, paths, and index' do
-        upsert_index
+        insert_index
         expect(database.data).to match({
           foo: {
             'index' => {

@@ -43,28 +43,28 @@ module Generators
             in 'String' if schema.dig(key, 'primary_key')
               @database.upsert_record(record: record, primary_key: value.to_s, value: data)
             in _ => matched_type
-              upsert_index(matched_type, record, key, value, data[primary_key])
+              insert_index(matched_type, record, key, value, data[primary_key])
           end
         end
       end
 
-      def upsert_index(type, record, key, value, index)
+      def insert_index(type, record, key, value, index)
         case type
           in 'Array[String]'
-            value.each { |val| upsert_index_for_string_value(record, key, val, index) }
+            value.each { |val| insert_index_for_string_value(record, key, val, index) }
           in 'Time'
-            @database.upsert_index(record: record, paths: [key, *time_attributes_from(value)], index: index)
+            @database.insert_index(record: record, paths: [key, *time_attributes_from(value)], index: index)
           in 'String'
-            upsert_index_for_string_value(record, key, value, index)
+            insert_index_for_string_value(record, key, value, index)
           in 'Boolean'
-            @database.upsert_index(record: record, paths: [key, value == true], index: index)
+            @database.insert_index(record: record, paths: [key, value == true], index: index)
           in _
-            @database.upsert_index(record: record, paths: [key, value], index: index)
+            @database.insert_index(record: record, paths: [key, value], index: index)
         end
       end
 
-      def upsert_index_for_string_value(record, key, value, index)
-        @database.upsert_index(record: record, paths: [key, value.to_s.downcase], index: index)
+      def insert_index_for_string_value(record, key, value, index)
+        @database.insert_index(record: record, paths: [key, value.to_s.downcase], index: index)
       end
 
       def get_schema!(record)

@@ -24,7 +24,7 @@ module Models
       upsert([record, primary_key], value)
     end
 
-    def upsert_index(record:, paths:, index:)
+    def insert_index(record:, paths:, index:)
       new_record_ids = search_index(record: record, paths: paths).to_a + [index]
 
       upsert([record, 'index', *paths], new_record_ids.uniq)
