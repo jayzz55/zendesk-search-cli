@@ -2,6 +2,7 @@
 
 require 'generators/database'
 require 'services/fetch_schema'
+require 'validators/search_term'
 require 'repository'
 require 'json'
 require 'dry/monads'
@@ -47,5 +48,9 @@ class SearchApp
 
   def get_search_terms_for(record:)
     Services::FetchSchema.call(record: record).fmap(&:keys)
+  end
+
+  def validate_search_term(record:, search_term:)
+    Validators::SearchTerm.call(record: record, search_term: search_term)
   end
 end

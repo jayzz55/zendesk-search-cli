@@ -219,4 +219,28 @@ describe SearchApp do
       end
     end
   end
+
+  describe '.validate_search_term' do
+    subject(:validate_search_term) do
+      search_app.value!.validate_search_term(record: record, search_term: search_term)
+    end
+
+    let(:record) { 'users' }
+
+    context 'when provided search_term is invalid' do
+      let(:search_term) { 'foo' }
+
+      it 'returns a Failure' do
+        expect(validate_search_term.failure).to be_a Errors::UnknownSearchTerm
+      end
+    end
+
+    context 'when provided search_term is valid' do
+      let(:search_term) { 'created_at' }
+
+      it 'returns a Success' do
+        expect(validate_search_term.success?).to eq true
+      end
+    end
+  end
 end
