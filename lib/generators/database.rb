@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'schemas'
+require 'schema'
 require 'time'
 require 'dry/monads'
 require 'models/database'
