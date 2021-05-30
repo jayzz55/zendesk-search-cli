@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'generators/database'
+require 'services/generate_database'
 require 'services/fetch_schema'
 require 'validators/search_term'
 require 'parsers/search_value'
@@ -23,7 +23,7 @@ class SearchApp
       parsed_organization_json = yield parse_json(organization_json)
       parsed_ticket_json = yield parse_json(ticket_json)
 
-      db = yield Generators::Database.call(
+      db = yield Services::GenerateDatabase.call(
         'users' => parsed_user_json,
         'organizations' => parsed_organization_json,
         'tickets' => parsed_ticket_json

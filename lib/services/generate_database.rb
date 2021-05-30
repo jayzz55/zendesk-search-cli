@@ -8,8 +8,8 @@ require 'errors/generate_database'
 require 'services/fetch_schema'
 require 'parsers/time_attributes'
 
-module Generators
-  class Database
+module Services
+  class GenerateDatabase
     @database = nil
 
     class << self

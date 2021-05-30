@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'generators/database'
+require 'services/generate_database'
 
-describe Generators::Database do
+describe Services::GenerateDatabase do
   describe '#call' do
     subject(:database) { described_class.call(input) }
 
