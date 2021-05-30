@@ -13,7 +13,7 @@ module Models
     end
 
     def search_index(record:, paths:)
-      data.dig(record, 'index', *paths)
+      data.dig(record, 'index', *paths).to_a
     end
 
     def upsert_record(record:, primary_key:, value:)

@@ -66,16 +66,16 @@ describe Models::Database do
     context 'when provided record does not exist' do
       let(:record) { :something }
 
-      it 'returns the nil' do
-        expect(search_index).to eq nil
+      it 'returns a empty array' do
+        expect(search_index).to eq []
       end
     end
 
     context 'when provided paths does not exist' do
       let(:paths) { ['is_admin', false] }
 
-      it 'returns the nil' do
-        expect(search_index).to eq nil
+      it 'returns a empty array' do
+        expect(search_index).to eq []
       end
     end
   end
