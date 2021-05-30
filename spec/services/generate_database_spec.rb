@@ -139,6 +139,10 @@ describe Services::GenerateDatabase do
     end
 
     context 'when users data is provided' do
+      it 'generates database 2 users data populated' do
+        expect(database.value!.data.dig('users').except('index').size).to eq(2)
+      end
+
       it 'generates database with user 1 data populated' do
         expect(database.value!.data.dig('users', 1)).to match(user_json[0])
       end
@@ -264,6 +268,10 @@ describe Services::GenerateDatabase do
     end
 
     context 'when organizations data is provided' do
+      it 'generates database 2 organizations data populated' do
+        expect(database.value!.data.dig('organizations').except('index').size).to eq(2)
+      end
+
       it 'generates database with organization 1 data populated' do
         expect(database.value!.data.dig('organizations', 101)).to match(organization_json[0])
       end
@@ -326,6 +334,10 @@ describe Services::GenerateDatabase do
     context 'when tickets data is provided' do
       let(:ticket_1_id) { "436bf9b0-1147-4c0a-8439-6f79833bff5b" }
       let(:ticket_2_id) { "9s8df9b0-82jd-d99d-adss-998s833bff4e" }
+
+      it 'generates database 2 tickets data populated' do
+        expect(database.value!.data.dig('tickets').except('index').size).to eq(2)
+      end
 
       it 'generates database with ticket 1 data populated' do
         expect(database.value!.data.dig('tickets', ticket_1_id)).to match(ticket_json[0])

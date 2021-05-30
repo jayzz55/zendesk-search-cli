@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 USERS_SCHEMA = {
-  '_id' => { 'type' => 'PrimaryKey' },
+  '_id' => { 'type' => 'Integer', 'primary_key' => true },
   'url' => { 'type' => 'String' },
   'external_id' => { 'type' => 'String' },
   'name' => { 'type' => 'String' },
@@ -16,14 +16,14 @@ USERS_SCHEMA = {
   'email' => { 'type' => 'String' },
   'phone' => { 'type' => 'String' },
   'signature' => { 'type' => 'String' },
-  'organization_id' => { 'type' => 'ForeignKey' },
+  'organization_id' => { 'type' => 'Integer' },
   'tags' => { 'type' => 'Array[String]' },
   'suspended' => { 'type' => 'Boolean' },
   'role' => { 'type' => 'String' }
 }.freeze
 
 TICKETS_SCHEMA = {
-  '_id' => { 'type' => 'PrimaryKey' },
+  '_id' => { 'type' => 'String', 'primary_key' => true },
   'url' => { 'type' => 'String' },
   'external_id' => { 'type' => 'String' },
   'created_at' => { 'type' => 'Time' },
@@ -32,9 +32,9 @@ TICKETS_SCHEMA = {
   'description' => { 'type' => 'String' },
   'priority' => { 'type' => 'String' },
   'status' => { 'type' => 'String' },
-  'submitter_id' => { 'type' => 'ForeignKey' },
-  'assignee_id' => { 'type' => 'ForeignKey' },
-  'organization_id' => { 'type' => 'ForeignKey' },
+  'submitter_id' => { 'type' => 'Integer' },
+  'assignee_id' => { 'type' => 'Integer' },
+  'organization_id' => { 'type' => 'Integer' },
   'tags' => { 'type' => 'Array[String]' },
   'has_incidents' => { 'type' => 'Boolean' },
   'due_at' => { 'type' => 'Time' },
@@ -42,7 +42,7 @@ TICKETS_SCHEMA = {
 }.freeze
 
 ORGANIZATIONS_SCHEMA = {
-  '_id' => { 'type' => 'PrimaryKey' },
+  '_id' => { 'type' => 'Integer', 'primary_key' => true },
   'url' => { 'type' => 'String' },
   'external_id' => { 'type' => 'String' },
   'name' => { 'type' => 'String' },

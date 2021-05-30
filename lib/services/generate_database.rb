@@ -37,8 +37,10 @@ module Services
           case schema.dig(key, 'type')
             in nil
               raise Models::GenerateDatabaseError, "unknown schema #{key} error"
-            in 'PrimaryKey'
-              @database.upsert_record(record: record, primary_key: value, value: data)
+            in 'Integer' if schema.dig(key, 'primary_key')
+              @database.upsert_record(record: record, primary_key: value.to_i, value: data)
+            in 'String' if schema.dig(key, 'primary_key')
+              @database.upsert_record(record: record, primary_key: value.to_s, value: data)
             in _ => matched_type
               upsert_index(matched_type, record, key, value, data[primary_key])
           end
@@ -81,7 +83,7 @@ module Services
       end
 
       def primary_key_from(schema)
-        schema.select { |attr| schema.dig(attr, 'type') == 'PrimaryKey' }.keys.first
+        schema.select { |attr| schema.dig(attr, 'primary_key') }.keys.first
       end
     end
   end
