@@ -18,8 +18,10 @@ module Parsers
             parse_boolean(value)
           in /Time/
             parse_time(value)
+          in /String/
+            Some(value.downcase)
           in _
-            Some(value)
+            None()
         end
       end
 

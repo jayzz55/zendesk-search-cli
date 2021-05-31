@@ -89,10 +89,19 @@ describe Parsers::SearchValue do
 
     context 'when the type is String' do
       let(:type) { 'String' }
-      let(:value) { 'foo' }
+      let(:value) { 'FOO' }
 
-      it 'returns the value' do
+      it 'returns the downcased value' do
         expect(call.value!).to eq('foo')
+      end
+    end
+
+    context 'when the type is unknown' do
+      let(:type) { 'UNKNOWN' }
+      let(:value) { 'FOO' }
+
+      it 'returns a None' do
+        expect(call).to be_a(Dry::Monads::None)
       end
     end
   end
