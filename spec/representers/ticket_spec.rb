@@ -33,7 +33,7 @@ describe Representers::Ticket do
     }
   end
   let(:submitter) { {name: 'dan', alias: 'john', role: 'admin'} }
-  let(:assignee) { {name: 'alice', alias: 'mary', role: 'admin'} }
+  let(:assignee) { nil }
   let(:organization) { { name: 'MegaCorp' } }
 
   describe '#call' do
@@ -63,9 +63,6 @@ via                            web
     alias:    john
     role:     admin
 --- Assignne:
-    name:     alice
-    alias:    mary
-    role:     admin
 --- Organization:
     name:     MegaCorp
       DOCS

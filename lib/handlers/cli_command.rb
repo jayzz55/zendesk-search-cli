@@ -29,7 +29,6 @@ module Handlers
       result
     end
 
-    # rubocop:disable Metrics/AbcSize
     def pick_record(data)
       mappings = yield generate_record_mappings
       output.puts("Type 'quit' to quit anytime")
@@ -45,7 +44,6 @@ module Handlers
           Success(data)
       end
     end
-    # rubocop:enable Metrics/AbcSize
 
     def enter_search_term(data)
       record = data[:record]

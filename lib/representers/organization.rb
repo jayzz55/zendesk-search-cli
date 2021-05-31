@@ -17,7 +17,7 @@ module Representers
         string
       end
 
-      private
+            private
 
       def represent_organization_data(organization)
         string = ''
@@ -28,7 +28,6 @@ module Representers
         string
       end
 
-      # rubocop:disable Metrics/AbcSize
       def represent_tickets(tickets)
         string = ''
         tickets.each_with_index do |ticket, index|
@@ -38,9 +37,7 @@ module Representers
         end
         string
       end
-      # rubocop:enable Metrics/AbcSize
 
-      # rubocop:disable Metrics/AbcSize
       def represent_users(users)
         string = ''
         users.each_with_index do |user, index|
@@ -50,7 +47,6 @@ module Representers
         end
         string
       end
-      # rubocop:enable Metrics/AbcSize
-    end
+          end
   end
 end

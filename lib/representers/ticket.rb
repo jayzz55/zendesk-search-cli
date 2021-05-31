@@ -32,6 +32,8 @@ module Representers
       end
 
       def represent_user(user)
+        return '' if user.nil?
+
         string = ''
         string += ''.rjust(3) + ' name:'.ljust(10) + " #{user[:name]}\n"
         string += ''.rjust(3) + ' alias:'.ljust(10) + " #{user[:alias]}\n"
@@ -40,6 +42,8 @@ module Representers
       end
 
       def represent_organization(organization)
+        return '' if organization.nil?
+
         ''.rjust(3) + ' name:'.ljust(10) + " #{organization[:name]}\n"
       end
     end

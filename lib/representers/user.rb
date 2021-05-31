@@ -31,7 +31,6 @@ module Representers
         string
       end
 
-      # rubocop:disable Metrics/AbcSize
       def represent_tickets(tickets)
         string = ''
         tickets.each_with_index do |ticket, index|
@@ -41,9 +40,10 @@ module Representers
         end
         string
       end
-      # rubocop:enable Metrics/AbcSize
 
       def represent_organization(organization)
+        return '' if organization.nil?
+
         ''.rjust(3) + ' name:'.ljust(10) + " #{organization[:name]}\n"
       end
     end
