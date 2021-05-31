@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'schema'
+require 'representers/organization'
 
 module Models
   Organization = Struct.new(
@@ -16,6 +17,10 @@ module Models
           associated_users: users
         )
       )
+    end
+
+    def to_s(representer = Representers::Organization)
+      representer.call(self)
     end
   end
 end

@@ -5,6 +5,7 @@ module Representers
     class << self
       def call(user)
         string = ''
+        string += "* User with _id #{user._id}\n"
         string += represent_user_data(user)
 
         string += "--- Submitted tickets:\n"
