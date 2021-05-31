@@ -24,3 +24,6 @@ Naming/MethodParameterName:
 
 Metrics/MethodLength:
   Max: 15
+
+Metrics/ClassLength:
+  Max: 150
