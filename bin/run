@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require 'bundler/setup'
+require 'pry'
+
+$LOAD_PATH.unshift File.expand_path('.', 'lib')
+
+require 'main'
+
+begin
+  Main.call()
+rescue Interrupt
+  puts "\nExiting... Goodbye."
+end
