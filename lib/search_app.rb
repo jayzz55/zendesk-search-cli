@@ -45,7 +45,7 @@ class SearchApp
   end
 
   def available_records
-    Success(repo.available_records)
+    repo.available_records
   end
 
   def get_search_terms_for(record:)
@@ -63,8 +63,6 @@ class SearchApp
     yield Services::ValidateSearchTerm.call(search_terms: schema.keys, value: search_term)
     parsed_value = yield Services::ParseAndValidateSearchValue.call(type: schema.dig(search_term, 'type'), value: value)
 
-    result = repo.search(record: record, search_term: search_term, value: parsed_value)
-
-    Success(result)
+    repo.search(record: record, search_term: search_term, value: parsed_value)
   end
 end

@@ -4,7 +4,11 @@ require 'models/user'
 require 'models/organization'
 require 'models/ticket'
 
+require 'dry/monads'
+
 class Repository
+  include Dry::Monads[:try, :result]
+
   attr_reader :database
 
   def initialize(database)
@@ -12,18 +16,20 @@ class Repository
   end
 
   def available_records
-    database.available_records
+    Try { database.available_records }.to_result
   end
 
   def search(record:, search_term:, value:)
-    case record
-      in 'users' | 'organizations' | 'tickets' => matched_record
+    Try do
+      case record
+        in 'users' | 'organizations' | 'tickets' => matched_record
         method("search_#{matched_record}")
           .call(search_term, value)
           .then { |results| method("search_#{matched_record}_associations").call(results) }
-      in
+        in
         []
-    end
+      end
+    end.to_result
   end
 
   private
