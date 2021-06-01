@@ -11,7 +11,7 @@ module Representers
         string += "--- Submitter:\n"
         string += represent_user(ticket.associated_submitter)
 
-        string += "--- Assignne:\n"
+        string += "--- Assignee:\n"
         string += represent_user(ticket.associated_assignee)
 
         string += "--- Organization:\n"

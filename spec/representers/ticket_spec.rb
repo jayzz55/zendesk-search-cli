@@ -62,7 +62,7 @@ via                            web
     name:     dan
     alias:    john
     role:     admin
---- Assignne:
+--- Assignee:
 --- Organization:
     name:     MegaCorp
       DOCS
