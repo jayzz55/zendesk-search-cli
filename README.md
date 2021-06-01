@@ -80,6 +80,10 @@ For this search app, a ruby hash is mainly used to store the data. A hash is cho
 
 Given the use case of the search app, where it's mostly a Read operation and the only Write operation is at the initialization of the app and also the feature of being able to search efficiently on any fields, all the fields aside the primary key (as defined in the schema) are being indexed. At the end of each each indexes is an array of primary key that can be used to easily access the data.
 
+The `Time` value is being parsed in UTC time as [year, month, day, hour, minute, second]. This decision may seem over-engineered, but I believe that this is the proper way to store a time value. The other alternative is to store time as an ISO8601 string and trading the dilution of the time's details in the indexes with simplicity.
+
+See the following diagram for an illustration of the Database modelling:
+
 ![](./images/database-model.png)
 
 ### High level architecture
