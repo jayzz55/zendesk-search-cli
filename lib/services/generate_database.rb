@@ -60,10 +60,10 @@ module Services
             @database.insert_index(record: record, paths: [key, *time_attributes_from(value)], index: index)
           in 'String'
             insert_index_for_string_value(record, key, value, index)
+          in 'Integer'
+            @database.insert_index(record: record, paths: [key, value.to_i], index: index)
           in 'Boolean'
             @database.insert_index(record: record, paths: [key, value == true], index: index)
-          in _
-            @database.insert_index(record: record, paths: [key, value], index: index)
         end
       end
 

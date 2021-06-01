@@ -242,7 +242,7 @@ describe Services::GenerateDatabase do
       it 'generates database index for the organization_id attribute' do
         expect(database.value!.data.dig('users', 'index', 'organization_id')).to match({
           101 => [1],
-          nil => [2]
+          0 => [2]
         })
       end
 
@@ -433,21 +433,21 @@ describe Services::GenerateDatabase do
       it 'generates database index for the submitter_id attribute' do
         expect(database.value!.data.dig('tickets', 'index', 'submitter_id')).to match({
           1 => [ticket_1_id],
-          nil => [ticket_2_id]
+          0 => [ticket_2_id]
         })
       end
 
       it 'generates database index for the assignee_id attribute' do
         expect(database.value!.data.dig('tickets', 'index', 'assignee_id')).to match({
           2 => [ticket_1_id],
-          nil => [ticket_2_id]
+          0 => [ticket_2_id]
         })
       end
 
       it 'generates database index for the organization_id attribute' do
         expect(database.value!.data.dig('tickets', 'index', 'organization_id')).to match({
           101 => [ticket_1_id],
-          nil => [ticket_2_id]
+          0 => [ticket_2_id]
         })
       end
     end
