@@ -8,6 +8,8 @@ require 'errors/generate_database'
 require 'services/fetch_schema'
 require 'parsers/time_attributes'
 
+DEFAULT_SCHEMA_GETTER = ->(record) { Services::FetchSchema.call(record: record) }
+
 module Services
   class GenerateDatabase
     @database = nil
@@ -15,12 +17,12 @@ module Services
     class << self
       include Dry::Monads[:try, :result]
 
-      def call(input)
+      def call(input, schema_getter = DEFAULT_SCHEMA_GETTER)
         Try do
           @database = Models::Database.new
 
           input.each do |record, json_data|
-            schema = get_schema!(record)
+            schema = get_schema!(schema_getter, record)
 
             @database.add_schema(record: record, schema: schema)
 
@@ -41,7 +43,7 @@ module Services
         data.each do |key, value|
           case schema.dig(key, 'type')
             in nil
-              raise Errors::GenerateDatabase, "unknown schema #{key} error"
+              raise Errors::GenerateDatabase, "unknown schema '#{key}' found in '#{record}'"
             in 'Integer' if schema.dig(key, 'primary_key')
               @database.upsert_record(record: record, primary_key: value.to_i, value: data)
             in 'String' if schema.dig(key, 'primary_key')
@@ -64,6 +66,8 @@ module Services
             @database.insert_index(record: record, paths: [key, value.to_i], index: index)
           in 'Boolean'
             @database.insert_index(record: record, paths: [key, value == true], index: index)
+          in _
+            raise Errors::GenerateDatabase, "Does not know how to handle type '#{type}' in '#{record}' schema"
         end
       end
 
@@ -71,10 +75,10 @@ module Services
         @database.insert_index(record: record, paths: [key, value.to_s.downcase], index: index)
       end
 
-      def get_schema!(record)
-        Services::FetchSchema
-          .call(record: record)
-          .value_or { raise Errors::GenerateDatabase, "unknown #{record} record error" }
+      def get_schema!(schema_getter, record)
+        schema_getter
+          .call(record)
+          .value_or { raise Errors::GenerateDatabase, "unknown '#{record}' record error" }
       end
 
       def time_attributes_from(value)

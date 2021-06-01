@@ -5,6 +5,8 @@ require 'services/generate_database'
 
 describe Services::GenerateDatabase do
   describe '#call' do
+    include Dry::Monads[:result]
+
     subject(:database) { described_class.call(input) }
 
     let(:input) do
@@ -474,6 +476,22 @@ describe Services::GenerateDatabase do
             "random_attribute" => 123
           }
         ]
+      end
+
+      it 'returns a failure' do
+        expect(database.failure).to be_a(Errors::GenerateDatabase)
+      end
+    end
+
+    context 'when a schema contains an unknown type' do
+      subject(:database) { described_class.call(input, schema_getter) }
+
+      let(:schema_getter) { lambda { |record| Success(schema) } }
+      let(:schema) do
+        {
+          '_id' => { 'type' => 'Integer', 'primary_key' => true },
+          'url' => { 'type' => 'Unknown' }
+        }
       end
 
       it 'returns a failure' do

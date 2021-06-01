@@ -36,6 +36,34 @@ RSpec.describe Handlers::WithErrorHandling do
     end
   end
 
+  context 'when result return a Failure(Errno::ENOENT)' do
+    let(:result) { Failure(Errno::ENOENT.new) }
+
+    it 'returns an :error' do
+      expect(error_handling).to eq :error
+    end
+
+    it 'calls puts on the output error message' do
+      expect { error_handling }.to change { output.string }
+        .from('')
+        .to("Sorry, unable to load the provided input data\nPlease ensure the input data file path is correct.\n")
+    end
+  end
+
+  context 'when result return a Failure(Errors::GenerateDatabase)' do
+    let(:result) { Failure(Errors::GenerateDatabase.new('Kaboom!')) }
+
+    it 'returns an :error' do
+      expect(error_handling).to eq :error
+    end
+
+    it 'calls puts on the output error message' do
+      expect { error_handling }.to change { output.string }
+        .from('')
+        .to("Sorry, there seems to be an issue in loading the application.\nReason: Kaboom!\n")
+    end
+  end
+
   context 'when result return a Failure with other message' do
     let(:result) { Failure(:error) }
 
