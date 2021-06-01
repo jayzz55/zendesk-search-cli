@@ -45,7 +45,7 @@ module Services
             in 'Integer' if schema.dig(key, 'primary_key')
               @database.upsert_record(record: record, primary_key: value.to_i, value: data)
             in 'String' if schema.dig(key, 'primary_key')
-              @database.upsert_record(record: record, primary_key: value.to_s, value: data)
+              @database.upsert_record(record: record, primary_key: value.to_s.downcase, value: data)
             in _ => matched_type
               insert_index(matched_type, record, key, value, data[primary_key])
           end
