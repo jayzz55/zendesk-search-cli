@@ -67,6 +67,26 @@ describe Handlers::CliCommand do
     it 'returns a failure at the end' do
       expect(call.failure).to eq(:quit)
     end
+
+    context 'when command_2 returns a failure' do
+      let(:command_2) do
+        lambda do |_data|
+          output.puts("command_2 is called\n")
+          Failure('error in command_2')
+        end
+      end
+
+      it 'calls only command_1 and comman_2' do
+        call
+        expect(output.string).to match(
+          "command_1 is called\ncommand_2 is called"
+        )
+      end
+
+      it 'returns the failure' do
+        expect(call.failure).to eq('error in command_2')
+      end
+    end
   end
 
   describe '.pick_record' do
