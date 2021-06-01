@@ -14,6 +14,4 @@ group :test, :development do
   gem 'simplecov', require: false
 end
 
-gem 'activesupport-inflector'
 gem 'dry-monads'
-gem 'i18n'
