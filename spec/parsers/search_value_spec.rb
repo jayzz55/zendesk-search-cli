@@ -10,6 +10,15 @@ describe Parsers::SearchValue do
       described_class.call(type: type, value: value)
     end
 
+    context 'when provided value is an empty string' do
+      let(:value) { '' }
+      let(:type) { nil }
+
+      it 'returns empty string' do
+        expect(call.value!).to eq('')
+      end
+    end
+
     context 'when the type is nil' do
       let(:type) { nil }
       let(:value) { 'foo' }
@@ -50,7 +59,7 @@ describe Parsers::SearchValue do
         end
       end
 
-      context 'when provided value is a valid true' do
+      context 'when provided value is a valid true string' do
         let(:value) { 'true' }
 
         it 'returns true as boolean' do
@@ -58,8 +67,24 @@ describe Parsers::SearchValue do
         end
       end
 
-      context 'when provided value is a valid false' do
+      context 'when provided value is a valid false string' do
         let(:value) { 'false' }
+
+        it 'returns false as boolean' do
+          expect(call.value!).to eq(false)
+        end
+      end
+
+      context 'when provided value is a valid true boolean' do
+        let(:value) { true }
+
+        it 'returns true as boolean' do
+          expect(call.value!).to eq(true)
+        end
+      end
+
+      context 'when provided value is a valid false boolean' do
+        let(:value) { false }
 
         it 'returns false as boolean' do
           expect(call.value!).to eq(false)

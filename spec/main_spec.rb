@@ -5,8 +5,16 @@ require 'main'
 require 'stringio'
 
 describe Main do
-  subject(:main) { Main.call(output: printer, input: input) }
+  subject(:main) { Main.call(input_data: input_data, output: printer, input: input) }
 
+  let(:input_data) do
+    {
+      users: 'spec/fixtures/users.json',
+      organizations: 'spec/fixtures/organizations.json',
+      tickets: 'spec/fixtures/tickets.json'
+
+    }
+  end
   let(:input) { StringIO.new(input_commands.join("\n")) }
   let(:output) { StringIO.new }
   let(:printer) { Handlers::Printer.new(output)}
@@ -367,6 +375,77 @@ Search again?: y/n
 exiting.. Goodbye
         DOCS
       end
+    end
+  end
+
+
+  context 'when searching for a field with an empty string' do
+    let(:input_commands) { ['1', 'created_at', '', 'n'] }
+
+    it 'displays the search results' do
+      main
+      expect(output.string).not_to match <<-DOCS
+Loading data...
+Finished loading data!
+Initializing application...
+Finished initializing application!
+=======================================================
+Welcome to Zendesk Search
+Press '1' to search for users
+Press '2' to search for organizations
+Press '3' to search for tickets
+Type 'quit' to quit anytime
+Search users with:
+-----------------------
+_id
+url
+external_id
+name
+alias
+created_at
+active
+verified
+shared
+locale
+timezone
+last_login_at
+email
+phone
+signature
+organization_id
+tags
+suspended
+role
+-----------------------
+Enter search term:
+Enter search value:
+Found 1 search results.
+* User with _id 76
+_id                            76
+url
+external_id
+name
+alias
+created_at
+active
+verified
+shared
+locale
+timezone
+last_login_at
+email
+phone
+signature
+organization_id
+tags
+suspended
+role
+--- Submitted tickets:
+--- Assigned Tickets:
+--- Organization:
+Search again?: y/n
+exiting.. Goodbye
+      DOCS
     end
   end
 end

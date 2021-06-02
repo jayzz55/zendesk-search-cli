@@ -55,15 +55,16 @@ run `./bin/run`
 ## Assumption
 
 * The schema in `lib/schema.rb` represents the structure of the input data for users, organizations, and tickets. This means that any extra attributes provided in the input data will be considered an invalid data and the application will return an error.
+* All the values except for the primary key as defined in the schema (eg: `_id` is the primary_key here) are considered optional. When the primary key attribute is not provided, the the input data will be considered an invalid data and the application will return an error.
 * When parsing the input data, a coercion is made on the value for the database. see the followings for the coercion assumption made:
-  * For data with schema type of a `String`, a `null` value will be coerced to an empty string, and the value will be downcased.
-  * For data with schema type of a `Integer`, a `null` value will be coerced to a `0` integer.
-  * For data with schema type of a `Boolean`, any value that is not a `true` boolean will be coerced to a `false` boolean.
-  * For data with schema type of a `Time`, the value is parsed as UTC time into time attributes which consists of year, month, day, hour, minute, seconds. if any invalid time value is provided, the application will return an error.
-  * For data with schema type of a `Array[String]`, the value will be parsed as multiple of the `String` schema type.
-  * Other data types (like `Array[Integer]`) is not added because it is not needed in the current schema. This other types can be easily added in later when neded.
+  * Any `null` value or attributes that are not provided is being parsed as an empty string.
+  * For data with schema type of a `String`, the value will be downcased.
+  * For data with schema type of a `Boolean`, a string `'true'` or `'false'` will be parsed as boolean.
+  * For data with schema type of a `Time`, the value is parsed as UTC time into time attributes which consists of year, month, day, hour, minute, seconds.
+  * For any invalid value according to its type as defined in the schema (eg: `'some value'` parsed as either an Integer, Boolean, or Time), the application will return an error.
 * The provided CLI is slighty different from the one outlined in the instruction, the list of searchable fields is not an option the user has to choose, but it's by default provided when the user need to enter the search term. This makes it easier to use the search app, and this change is assumed to be okay.
 * The user is able to search with case insensitive value.
+* The user is able to search empty values on any fields except for the primary key field (eg: `_id` in this App example).
 * A full value matching is assumed in this search app.
 
 ## Approach

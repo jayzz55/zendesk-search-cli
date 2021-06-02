@@ -40,32 +40,27 @@ describe Services::GenerateDatabase do
             "Springville",
             "Sutton"
           ],
-          "suspended" => true,
+          "suspended" => false,
           "role" => "admin"
         },
         {
           "_id" => 2,
-          "url" => "",
-          "external_id" => "",
-          "name" => "",
-          "alias" => "",
+          "external_id" => nil,
           "created_at" => "2016-04-15T05:19:46 -10:00",
           "active" => false,
           "verified" => false,
           "shared" => nil,
           "locale" => nil,
           "timezone" => nil,
-          "last_login_at" => "",
-          "email" => "",
-          "phone" => "",
-          "signature" => "",
+          "last_login_at" => nil,
+          "signature" => nil,
           "organization_id" => nil,
           "tags" => [
             "Melbourne",
             "Sutton"
           ],
           "suspended" => nil,
-          "role" => ""
+          "role" => nil
         }
       ]
     end
@@ -84,13 +79,9 @@ describe Services::GenerateDatabase do
         },
         {
           "_id" => 102,
-          "url" => "",
-          "external_id" => "",
-          "name" => "",
+          "external_id" => nil,
           "domain_names" => ["apple.com", "zentix.com"],
           "created_at" => "2016-05-21T11:10:28 -10:00",
-          "details" => "",
-          "shared_tickets" => nil,
           "tags" => ["Fulton", "Barley"]
         }
       ]
@@ -117,21 +108,16 @@ describe Services::GenerateDatabase do
         },
         {
           "_id" => "9s8df9b0-82jd-d99d-adss-998s833bff4e",
-          "url" => "",
-          "external_id" => "",
+          "url" => nil,
+          "external_id" => nil,
           "created_at" => "2016-04-28T11:19:34 -10:00",
-          "type" => "",
-          "subject" => "",
-          "description" => "",
-          "priority" => "",
-          "status" => "",
+          "type" => nil,
+          "subject" => nil,
           "submitter_id" => nil,
           "assignee_id" => nil,
           "organization_id" => nil,
-          "tags" => ["Ohio", "Melbourne"],
+          "tags" => [],
           "has_incidents" => false,
-          "due_at" => "",
-          "via" => ""
         }
       ]
     end
@@ -200,7 +186,7 @@ describe Services::GenerateDatabase do
 
       it 'generates database index for the shared attribute' do
         expect(database.value!.data.dig('users', 'index', 'shared')).to match({
-          true => [1], false => [2]
+          true => [1], '' => [2]
         })
       end
 
@@ -244,7 +230,7 @@ describe Services::GenerateDatabase do
       it 'generates database index for the organization_id attribute' do
         expect(database.value!.data.dig('users', 'index', 'organization_id')).to match({
           101 => [1],
-          0 => [2]
+          '' => [2]
         })
       end
 
@@ -258,7 +244,7 @@ describe Services::GenerateDatabase do
 
       it 'generates database index for the suspended attribute' do
         expect(database.value!.data.dig('users', 'index', 'suspended')).to match({
-          true => [1], false => [2]
+          false => [1], '' => [2]
         })
       end
 
@@ -320,7 +306,7 @@ describe Services::GenerateDatabase do
 
       it 'generates database index for the shared_tickets attribute' do
         expect(database.value!.data.dig('organizations', 'index', 'shared_tickets')).to match({
-          false => [101, 102]
+          false => [101], '' => [102]
         })
       end
 
@@ -378,9 +364,8 @@ describe Services::GenerateDatabase do
 
       it 'generates database index for the tags attribute' do
         expect(database.value!.data.dig('tickets', 'index', 'tags')).to match({
-          "ohio" => [ticket_1_id, ticket_2_id],
-          "northern mariana islands" => [ticket_1_id],
-          "melbourne" => [ticket_2_id]
+          "ohio" => [ticket_1_id],
+          "northern mariana islands" => [ticket_1_id]
         })
       end
 
@@ -435,21 +420,21 @@ describe Services::GenerateDatabase do
       it 'generates database index for the submitter_id attribute' do
         expect(database.value!.data.dig('tickets', 'index', 'submitter_id')).to match({
           1 => [ticket_1_id],
-          0 => [ticket_2_id]
+          '' => [ticket_2_id]
         })
       end
 
       it 'generates database index for the assignee_id attribute' do
         expect(database.value!.data.dig('tickets', 'index', 'assignee_id')).to match({
           2 => [ticket_1_id],
-          0 => [ticket_2_id]
+          '' => [ticket_2_id]
         })
       end
 
       it 'generates database index for the organization_id attribute' do
         expect(database.value!.data.dig('tickets', 'index', 'organization_id')).to match({
           101 => [ticket_1_id],
-          0 => [ticket_2_id]
+          '' => [ticket_2_id]
         })
       end
     end
@@ -468,7 +453,7 @@ describe Services::GenerateDatabase do
       end
     end
 
-    context 'when invalid data is provided' do
+    context 'when invalid attribute is provided' do
       let(:organization_json) do
         [
           {
@@ -483,15 +468,27 @@ describe Services::GenerateDatabase do
       end
     end
 
-    context 'when a schema contains an unknown type' do
-      subject(:database) { described_class.call(input, schema_getter) }
+    context 'when invalid value type is provided' do
+      let(:organization_json) do
+        [
+          {
+            "_id" => 'supposed-to-be-an-integer',
+          }
+        ]
+      end
 
-      let(:schema_getter) { lambda { |record| Success(schema) } }
-      let(:schema) do
-        {
-          '_id' => { 'type' => 'Integer', 'primary_key' => true },
-          'url' => { 'type' => 'Unknown' }
-        }
+      it 'returns a failure' do
+        expect(database.failure).to be_a(Errors::GenerateDatabase)
+      end
+    end
+
+    context 'when primary_key is not provided' do
+      let(:organization_json) do
+        [
+          {
+            "name" => 'MegaCorp'
+          }
+        ]
       end
 
       it 'returns a failure' do

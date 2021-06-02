@@ -9,16 +9,16 @@ module Parsers
       include Dry::Monads[:maybe, :try]
 
       def call(type:, value:)
-        case type
-          in nil
-            None()
-          in /Integer/
+        case [value, type]
+          in ['', _]
+            Some('')
+          in [_, /Integer/]
             parse_integer(value)
-          in /Boolean/
+          in [_, /Boolean/]
             parse_boolean(value)
-          in /Time/
+          in [_, /Time/]
             parse_time(value)
-          in /String/
+          in [_, /String/]
             Some(value.downcase)
           in _
             None()
@@ -33,9 +33,9 @@ module Parsers
 
       def parse_boolean(value)
         case value
-          in 'true'
+          in true | 'true'
             Some(true)
-          in 'false'
+          in false | 'false'
             Some(false)
           in _
             None()
