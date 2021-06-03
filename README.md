@@ -77,7 +77,7 @@ Libraries used:
 
 ### Database
 
-For this search app, a ruby hash is mainly used to store the data. A hash is chosen because it has a linear time complexity for search and insertion which is the main use case here.
+For this search app, a ruby hash is mainly used to store the data. A hash is chosen because it has a constant time complexity for search and insertion which is the main use case here.
 
 Given the use case of the search app, where it's mostly a Read operation and the only Write operation is at the initialization of the app and also the feature of being able to search efficiently on any fields, all the fields aside the primary key (as defined in the schema) are being indexed. At the end of each each indexes is an array of primary key that can be used to easily access the data.
 
